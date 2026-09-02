@@ -167,7 +167,11 @@ func resourceCloudStackNetworkOfferingCreate(d *schema.ResourceData, meta interf
 	}
 
 	if v, ok := d.GetOk("domain_id"); ok {
-		p.SetDomainid(v.([]string))
+		domainIds := make([]string, 0, len(v.([]interface{})))
+		for _, id := range v.([]interface{}) {
+			domainIds = append(domainIds, id.(string))
+		}
+		p.SetDomainid(domainIds)
 	}
 
 	if v, ok := d.GetOk("network_rate"); ok {
