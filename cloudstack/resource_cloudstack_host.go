@@ -178,7 +178,11 @@ func resourceCloudStackHostCreate(d *schema.ResourceData, meta interface{}) erro
 	}
 
 	if host_tags, ok := d.GetOk("host_tags"); ok {
-		p.SetHosttags(host_tags.([]string))
+		tags := make([]string, 0)
+		for _, tag := range host_tags.([]interface{}) {
+			tags = append(tags, tag.(string))
+		}
+		p.SetHosttags(tags)
 	}
 
 	if username, ok := d.GetOk("username"); ok {
@@ -275,7 +279,15 @@ func resourceCloudStackHostUpdate(d *schema.ResourceData, meta interface{}) erro
 
 	if d.HasChange("host_tags") {
 		log.Printf("[DEBUG] Updating Host tags: %s", d.Id())
-		p.SetHosttags(d.Get("host_tags").([]string))
+		tags := make([]string, 0)
+		for _, tag := range d.Get("host_tags").([]interface{}) {
+			tags = append(tags, tag.(string))
+		}
+		p.SetHosttags(tags)
+	}
+
+	if _, err := cs.Host.UpdateHost(p); err != nil {
+		return fmt.Errorf("Error updating host %s: %s", d.Id(), err)
 	}
 
 	return resourceCloudStackHostRead(d, meta)
