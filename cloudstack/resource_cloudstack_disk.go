@@ -268,7 +268,7 @@ func resourceCloudStackDiskUpdate(d *schema.ResourceData, meta interface{}) erro
 
 	// If the device ID changed, just detach here so we can re-attach the
 	// volume at the end of this function
-	if d.HasChange("device_id") || d.HasChange("virtual_machine") {
+	if d.HasChange("device_id") || d.HasChange("virtual_machine_id") {
 		// Detach the volume
 		if err := resourceCloudStackDiskDetach(d, meta); err != nil {
 			return fmt.Errorf("Error detaching disk %s from virtual machine: %s", name, err)
