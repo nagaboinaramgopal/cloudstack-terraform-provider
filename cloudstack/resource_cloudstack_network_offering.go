@@ -259,6 +259,9 @@ func resourceCloudStackNetworkOfferingUpdate(d *schema.ResourceData, meta interf
 		// Create a new parameter struct
 		p := cs.NetworkOffering.NewUpdateNetworkOfferingParams()
 
+		// Target this network offering
+		p.SetId(d.Id())
+
 		// Set the new name
 		p.SetName(d.Get("name").(string))
 
@@ -277,6 +280,9 @@ func resourceCloudStackNetworkOfferingUpdate(d *schema.ResourceData, meta interf
 
 		// Create a new parameter struct
 		p := cs.NetworkOffering.NewUpdateNetworkOfferingParams()
+
+		// Target this network offering
+		p.SetId(d.Id())
 
 		// Set the new display text
 		p.SetDisplaytext(d.Get("display_text").(string))
@@ -297,6 +303,9 @@ func resourceCloudStackNetworkOfferingUpdate(d *schema.ResourceData, meta interf
 		// Create a new parameter struct
 		p := cs.NetworkOffering.NewUpdateNetworkOfferingParams()
 
+		// Target this network offering
+		p.SetId(d.Id())
+
 		// Set the new max connections
 		p.SetMaxconnections(d.Get("max_connections").(int))
 
@@ -316,19 +325,22 @@ func resourceCloudStackNetworkOfferingUpdate(d *schema.ResourceData, meta interf
 		// Create a new parameter struct
 		p := cs.NetworkOffering.NewUpdateNetworkOfferingParams()
 
+		// Target this network offering
+		p.SetId(d.Id())
+
 		// Set the new domain id
 		p.SetDomainid(d.Get("domain_id").(string))
 
-		// Update the traffic type
+		// Update the domain id
 		_, err := cs.NetworkOffering.UpdateNetworkOffering(p)
 		if err != nil {
 			return fmt.Errorf(
-				"Error updating the traffic type for network offering %s: %s", name, err)
+				"Error updating the domain id for network offering %s: %s", name, err)
 		}
 
 	}
 
-	return resourceCloudStackInstanceRead(d, meta)
+	return resourceCloudStackNetworkOfferingRead(d, meta)
 }
 
 func resourceCloudStackNetworkOfferingDelete(d *schema.ResourceData, meta interface{}) error {
