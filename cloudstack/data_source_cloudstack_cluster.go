@@ -348,10 +348,10 @@ func applyClusterFilters(cluster *cloudstack.Cluster, filters *schema.Set) (bool
 			return false
 		}).String()
 
-		if r.MatchString(clusterField) {
-			return true, nil
+		if !r.MatchString(clusterField) {
+			return false, nil
 		}
 	}
 
-	return false, nil
+	return true, nil
 }

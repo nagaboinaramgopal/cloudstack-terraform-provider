@@ -272,10 +272,10 @@ func applyPodFilters(pod *cloudstack.Pod, filters *schema.Set) (bool, error) {
 			return false
 		}).String()
 
-		if r.MatchString(podField) {
-			return true, nil
+		if !r.MatchString(podField) {
+			return false, nil
 		}
 	}
 
-	return false, nil
+	return true, nil
 }
