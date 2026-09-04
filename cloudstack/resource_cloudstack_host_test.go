@@ -29,6 +29,25 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
+func TestResourceCloudStackHostHypervisorValidation(t *testing.T) {
+	validate := resourceCloudStackHost().Schema["hypervisor"].ValidateFunc
+
+	valid := []string{"XenServer", "KVM", "VMware", "Hyperv", "BareMetal", "Simulator", "Ovm3"}
+	for _, v := range valid {
+		if _, errs := validate(v, "hypervisor"); len(errs) != 0 {
+			t.Errorf("supported hypervisor %q should be accepted, got errors: %v", v, errs)
+		}
+	}
+
+	// Values that are not in the supported list, or that differ only in case, must be rejected at plan time.
+	invalid := []string{"foo", "docker", "esxi", "kvm2", "", "kvm", "simulator", "XENSERVER"}
+	for _, v := range invalid {
+		if _, errs := validate(v, "hypervisor"); len(errs) == 0 {
+			t.Errorf("unsupported hypervisor %q should be rejected, but validation accepted it", v)
+		}
+	}
+}
+
 func TestAccCloudStackHost_basic(t *testing.T) {
 	var h cloudstack.Host
 	resource.Test(t, resource.TestCase{
