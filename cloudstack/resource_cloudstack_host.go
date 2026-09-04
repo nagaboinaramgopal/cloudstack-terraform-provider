@@ -48,10 +48,10 @@ func resourceCloudStackHost() *schema.Resource {
 		},
 		Schema: map[string]*schema.Schema{
 			"hypervisor": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
 				ValidateFunc: validation.StringInSlice([]string{"xenserver", "kvm", "vmware", "baremetal", "simulator"}, false),
-				ForceNew: true,
+				ForceNew:     true,
 			},
 			"pod_id": {
 				Type:     schema.TypeString,
