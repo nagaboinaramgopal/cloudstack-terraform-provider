@@ -50,7 +50,7 @@ func resourceCloudStackHost() *schema.Resource {
 			"hypervisor": {
 				Type:         schema.TypeString,
 				Required:     true,
-				ValidateFunc: validation.StringInSlice([]string{"XenServer", "KVM", "VMware", "Hyperv", "BareMetal", "Simulator", "Ovm3"}, false),
+				ValidateFunc: validation.StringInSlice([]string{"XenServer", "KVM", "VMware", "Hyperv", "BareMetal", "Simulator", "Ovm3"}, true),
 				ForceNew:     true,
 			},
 			"pod_id": {

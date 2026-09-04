@@ -32,15 +32,16 @@ import (
 func TestResourceCloudStackHostHypervisorValidation(t *testing.T) {
 	validate := resourceCloudStackHost().Schema["hypervisor"].ValidateFunc
 
-	valid := []string{"XenServer", "KVM", "VMware", "Hyperv", "BareMetal", "Simulator", "Ovm3"}
+	// CloudStack's HypervisorType.getType() lowercases the input before lookup, so matching
+	// is case-insensitive server-side; the validator must accept any casing accordingly.
+	valid := []string{"XenServer", "KVM", "VMware", "Hyperv", "BareMetal", "Simulator", "Ovm3", "kvm", "simulator", "XENSERVER"}
 	for _, v := range valid {
 		if _, errs := validate(v, "hypervisor"); len(errs) != 0 {
 			t.Errorf("supported hypervisor %q should be accepted, got errors: %v", v, errs)
 		}
 	}
 
-	// Values that are not in the supported list, or that differ only in case, must be rejected at plan time.
-	invalid := []string{"foo", "docker", "esxi", "kvm2", "", "kvm", "simulator", "XENSERVER"}
+	invalid := []string{"foo", "docker", "esxi", "kvm2", ""}
 	for _, v := range invalid {
 		if _, errs := validate(v, "hypervisor"); len(errs) == 0 {
 			t.Errorf("unsupported hypervisor %q should be rejected, but validation accepted it", v)
